@@ -1,0 +1,22 @@
+# dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# environment variables — keep your API key off GitHub
+.env.local
+.env.local.js
+.env*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# editor
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
