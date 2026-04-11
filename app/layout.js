@@ -4,8 +4,13 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'Portfolio Tracker',
+  title: 'porty.tracker',
   description: 'Personal investment portfolio tracker',
+  icons: {
+    icon: '/logo.png',
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({ children }) {
