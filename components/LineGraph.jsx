@@ -74,7 +74,7 @@ function CustomXAxisTick({ x, y, payload, tickSet }) {
   );
 }
 
-export default function LineGraph({ chartData, loading, currency = 'USD', fxRate = 1 }) {
+export default function LineGraph({ chartData, loading, currency = 'USD', fxRate = 1, themeColour = '#6366f1' }) {
   if (loading) {
     return (
       <div className="bg-white rounded-2xl shadow-sm p-5">
@@ -138,10 +138,10 @@ export default function LineGraph({ chartData, loading, currency = 'USD', fxRate
             <Line
               type="monotone"
               dataKey="value"
-              stroke="#6366f1"
+              stroke={themeColour}
               strokeWidth={2}
               dot={false}
-              activeDot={{ r: 4, fill: '#6366f1', strokeWidth: 0 }}
+              activeDot={{ r: 4, fill: themeColour, strokeWidth: 0 }}
             />
           </LineChart>
         </ResponsiveContainer>
