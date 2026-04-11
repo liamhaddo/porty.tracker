@@ -117,9 +117,11 @@ export default function PortfolioTracker({ portfolio, onBack, onUpdate }) {
           {/* Back */}
           <button
             onClick={onBack}
-            className="text-sm text-gray-400 hover:text-gray-700 transition-colors shrink-0 flex items-center gap-1"
+            className="text-gray-400 hover:text-gray-700 transition-colors shrink-0 flex items-center"
           >
-            <span className="text-base leading-none">←</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 19l-7-7 7-7" />
+            </svg>
           </button>
 
           {/* Logo */}

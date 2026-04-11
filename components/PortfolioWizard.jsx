@@ -5,6 +5,22 @@ import Logo from './Logo';
 import { parseCSVToTransactions, applySplitsToTransactions, calcNetHoldings } from '../lib/chartCalc';
 import { savePortfolio, newPortfolioId, deletePortfolio } from '../lib/storage';
 
+function ChevronLeft() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M15 19l-7-7 7-7" />
+    </svg>
+  );
+}
+
+function ChevronRight() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 5l7 7-7 7" />
+    </svg>
+  );
+}
+
 const THEME_COLOURS = [
   { name: 'Indigo',      value: '#6366f1' },
   { name: 'Emerald',     value: '#10b981' },
@@ -59,10 +75,10 @@ export default function PortfolioWizard({ mode = 'create', portfolio = null, onC
           <button
             onClick={() => setStep(2)}
             disabled={!name.trim()}
-            className="flex-1 py-2.5 rounded-xl text-white text-sm font-medium transition-colors disabled:opacity-40"
+            className="flex-1 py-2.5 rounded-xl text-white text-sm font-medium transition-colors disabled:opacity-40 flex items-center justify-center gap-1.5"
             style={{ backgroundColor: themeColour }}
           >
-            Next →
+            Next <ChevronRight />
           </button>
         </div>
       </div>
@@ -99,16 +115,16 @@ export default function PortfolioWizard({ mode = 'create', portfolio = null, onC
         <div className="flex gap-2 pt-1">
           <button
             onClick={() => setStep(1)}
-            className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+            className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors flex items-center justify-center gap-1.5"
           >
-            ← Back
+            <ChevronLeft /> Back
           </button>
           <button
             onClick={() => setStep(3)}
-            className="flex-1 py-2.5 rounded-xl text-white text-sm font-medium transition-colors"
+            className="flex-1 py-2.5 rounded-xl text-white text-sm font-medium transition-colors flex items-center justify-center gap-1.5"
             style={{ backgroundColor: themeColour }}
           >
-            Next →
+            Next <ChevronRight />
           </button>
         </div>
       </div>
@@ -228,9 +244,9 @@ export default function PortfolioWizard({ mode = 'create', portfolio = null, onC
         <div className="flex gap-2">
           <button
             onClick={() => setStep(2)}
-            className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+            className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors flex items-center justify-center gap-1.5"
           >
-            ← Back
+            <ChevronLeft /> Back
           </button>
           {isEdit && !csvResult && !csvSkipped && (
             <button

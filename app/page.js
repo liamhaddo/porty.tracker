@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import HomeScreen       from '../components/HomeScreen';
 import PortfolioWizard  from '../components/PortfolioWizard';
 import PortfolioTracker from '../components/PortfolioTracker';
-import { getPortfolios, savePortfolio } from '../lib/storage';
+import { getPortfolios, savePortfolio, deletePortfolio } from '../lib/storage';
 
 // screen: 'home' | 'tracker' | 'wizard'
 
@@ -61,6 +61,11 @@ export default function App() {
     refreshList();
   }
 
+  function handleDelete(id) {
+    deletePortfolio(id);
+    refreshList();
+  }
+
   function handleBack() {
     setScreen('home');
     refreshList();
@@ -95,6 +100,7 @@ export default function App() {
       onOpen={handleOpen}
       onCreate={handleCreate}
       onEdit={handleEdit}
+      onDelete={handleDelete}
     />
   );
 }
