@@ -1,14 +1,17 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import Logo from './Logo';
 import SummaryBar from './SummaryBar';
 import HoldingsList from './HoldingsList';
 import AddHoldingModal from './AddHoldingModal';
 import ImportCsvModal from './ImportCsvModal';
+import AddMenu from './AddMenu';
+import Taskbar from './Taskbar';
 import { buildChartData, applySplitsToTransactions } from '../lib/chartCalc';
 import { savePortfolio } from '../lib/storage';
+import { useTickerColours } from '../lib/useTickerColours';
 
 const PieChartSection = dynamic(() => import('./PieChartSection'), { ssr: false });
 const LineGraph       = dynamic(() => import('./LineGraph'),       { ssr: false });
@@ -21,6 +24,7 @@ export default function PortfolioTracker({ portfolio, onBack, onUpdate }) {
   const [chartData,   setChartData]   = useState([]);
   const [loadingPrices, setLoadingPrices] = useState(true);
   const [lastUpdated, setLastUpdated] = useState(null);
+  const [showAddMenu, setShowAddMenu] = useState(false);
   const [showAdd,     setShowAdd]     = useState(false);
   const [showImport,  setShowImport]  = useState(false);
   const [currency,    setCurrency]    = useState('USD');
@@ -104,6 +108,8 @@ export default function PortfolioTracker({ portfolio, onBack, onUpdate }) {
 
   const fxRate = fxRates[currency] ?? 1;
   const themeColour = portfolio.themeColour || '#6366f1';
+  const tickers = useMemo(() => portfolio.holdings.map(h => h.ticker), [portfolio.holdings]);
+  const tickerColours = useTickerColours(tickers, themeColour);
   const totalValue = portfolio.holdings.reduce((s, h) => {
     const p = prices[h.ticker];
     return s + (p != null ? h.shares * p : 0);
@@ -129,36 +135,20 @@ export default function PortfolioTracker({ portfolio, onBack, onUpdate }) {
             <Logo />
           </div>
 
-          {/* Controls */}
-          <div className="flex items-center gap-2">
-            <select
-              value={currency}
-              onChange={e => setCurrency(e.target.value)}
-              className="text-xs font-medium text-gray-600 border border-gray-200 rounded-lg px-2 py-1.5 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-300 cursor-pointer transition-colors"
-            >
-              {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
-            </select>
-
-            <button
-              onClick={() => setShowImport(true)}
-              className="text-xs font-medium text-gray-500 hover:text-gray-800 border border-gray-200 rounded-lg px-3 py-1.5 hover:bg-gray-50 transition-colors"
-            >
-              Import CSV
-            </button>
-
-            <button
-              onClick={() => setShowAdd(true)}
-              className="hidden sm:flex items-center gap-1 text-xs font-medium text-white rounded-lg px-3 py-1.5 transition-colors"
-              style={{ backgroundColor: themeColour }}
-            >
-              <span className="text-base leading-none">+</span> Add Holding
-            </button>
-          </div>
+          {/* Currency selector */}
+          <select
+            value={currency}
+            onChange={e => setCurrency(e.target.value)}
+            className="text-xs font-medium text-gray-600 border border-gray-200 rounded-lg px-2 py-1.5 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-300 cursor-pointer transition-colors"
+          >
+            {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
+          </select>
         </div>
       </header>
 
       {/* Main */}
-      <main className="max-w-3xl mx-auto px-4 py-5 space-y-4">
+      <main className="max-w-3xl mx-auto px-4 py-5 space-y-4 pb-28 sm:pb-5">
+        <Taskbar themeColour={themeColour} onAdd={() => setShowAddMenu(true)} />
         <SummaryBar
           totalValue={totalValue}
           lastUpdated={lastUpdated}
@@ -173,6 +163,7 @@ export default function PortfolioTracker({ portfolio, onBack, onUpdate }) {
           currency={currency}
           fxRate={fxRate}
           themeColour={themeColour}
+          tickerColours={tickerColours}
         />
         <LineGraph
           chartData={chartData}
@@ -187,18 +178,18 @@ export default function PortfolioTracker({ portfolio, onBack, onUpdate }) {
           loading={loadingPrices}
           currency={currency}
           fxRate={fxRate}
+          themeColour={themeColour}
         />
       </main>
 
-      {/* Mobile FAB */}
-      <button
-        onClick={() => setShowAdd(true)}
-        className="sm:hidden fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full text-white shadow-lg text-2xl font-light flex items-center justify-center transition-colors"
-        style={{ backgroundColor: themeColour }}
-        aria-label="Add holding"
-      >
-        +
-      </button>
+      {showAddMenu && (
+        <AddMenu
+          onClose={() => setShowAddMenu(false)}
+          onImportCsv={() => setShowImport(true)}
+          onAddHolding={() => setShowAdd(true)}
+          themeColour={themeColour}
+        />
+      )}
 
       {showAdd && (
         <AddHoldingModal

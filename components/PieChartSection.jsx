@@ -3,10 +3,12 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { useState } from 'react';
 
-const BASE_COLORS = ['#f59e0b', '#10b981', '#3b82f6', '#ef4444', '#8b5cf6', '#14b8a6', '#f97316', '#ec4899'];
+const FALLBACK_COLORS = ['#f59e0b', '#10b981', '#3b82f6', '#ef4444', '#8b5cf6', '#14b8a6', '#f97316', '#ec4899'];
 
-function getColors(themeColour) {
-  return [themeColour, ...BASE_COLORS.filter(c => c !== themeColour)];
+function getSliceColour(ticker, index, tickerColours, themeColour) {
+  if (tickerColours[ticker]) return tickerColours[ticker];
+  const pool = [themeColour, ...FALLBACK_COLORS.filter(c => c !== themeColour)];
+  return pool[index % pool.length];
 }
 
 function fmtCurrency(value, currency) {
@@ -32,9 +34,8 @@ function CustomTooltip({ active, payload, currency, fxRate }) {
   );
 }
 
-export default function PieChartSection({ holdings, prices, loading, currency = 'USD', fxRate = 1, themeColour = '#6366f1' }) {
+export default function PieChartSection({ holdings, prices, loading, currency = 'USD', fxRate = 1, themeColour = '#6366f1', tickerColours = {} }) {
   const [activeIndex, setActiveIndex] = useState(null);
-  const COLORS = getColors(themeColour);
 
   const data = holdings
     .map((h) => {
@@ -89,7 +90,7 @@ export default function PieChartSection({ holdings, prices, loading, currency = 
                 {chartData.map((entry, index) => (
                   <Cell
                     key={entry.ticker}
-                    fill={COLORS[index % COLORS.length]}
+                    fill={getSliceColour(entry.ticker, index, tickerColours, themeColour)}
                     opacity={activeIndex === null || activeIndex === index ? 1 : 0.5}
                   />
                 ))}
@@ -111,7 +112,7 @@ export default function PieChartSection({ holdings, prices, loading, currency = 
                 <div className="flex items-center gap-2 min-w-0">
                   <span
                     className="w-2 h-2 rounded-full shrink-0"
-                    style={{ background: COLORS[index % COLORS.length] }}
+                    style={{ background: getSliceColour(d.ticker, index, tickerColours, themeColour) }}
                   />
                   <span className="text-xs font-semibold text-gray-800">{d.ticker}</span>
                 </div>

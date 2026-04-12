@@ -1,6 +1,5 @@
 'use client';
 
-import { DOMAINS } from '../lib/domains';
 import { useState } from 'react';
 
 function fmtCurrency(value, currency) {
@@ -14,13 +13,16 @@ function fmtCurrency(value, currency) {
 
 const fmtPct = (v) => `${v.toFixed(1)}%`;
 
-function TickerLogo({ ticker }) {
-  const domain = DOMAINS[ticker];
+function TickerLogo({ ticker, themeColour }) {
   const [errored, setErrored] = useState(false);
+  const token = process.env.NEXT_PUBLIC_LOGO_DEV_KEY;
 
-  if (!domain || errored) {
+  if (errored || !token) {
     return (
-      <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500 shrink-0">
+      <div
+        className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0"
+        style={{ backgroundColor: themeColour }}
+      >
         {ticker.slice(0, 2)}
       </div>
     );
@@ -29,7 +31,7 @@ function TickerLogo({ ticker }) {
   return (
     <div className="w-7 h-7 rounded-full overflow-hidden bg-gray-50 shrink-0 flex items-center justify-center">
       <img
-        src={`https://logo.clearbit.com/${domain}`}
+        src={`https://img.logo.dev/ticker/${ticker}?token=${token}&retina=true`}
         alt={ticker}
         width={28}
         height={28}
@@ -40,12 +42,12 @@ function TickerLogo({ ticker }) {
   );
 }
 
-function HoldingRow({ holding, price, pct, loading, currency, fxRate }) {
+function HoldingRow({ holding, price, pct, loading, currency, fxRate, themeColour }) {
   const valueUSD = price != null ? holding.shares * price : null;
 
   return (
     <div className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors rounded-xl">
-      <TickerLogo ticker={holding.ticker} />
+      <TickerLogo ticker={holding.ticker} themeColour={themeColour} />
 
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold text-gray-800">{holding.ticker}</p>
@@ -75,7 +77,7 @@ function HoldingRow({ holding, price, pct, loading, currency, fxRate }) {
   );
 }
 
-export default function HoldingsList({ holdings, prices, loading, currency = 'USD', fxRate = 1 }) {
+export default function HoldingsList({ holdings, prices, loading, currency = 'USD', fxRate = 1, themeColour = '#6366f1' }) {
   const total = holdings.reduce((s, h) => {
     const p = prices[h.ticker];
     return s + (p != null ? h.shares * p : 0);
@@ -109,6 +111,7 @@ export default function HoldingsList({ holdings, prices, loading, currency = 'US
               loading={loading}
               currency={currency}
               fxRate={fxRate}
+              themeColour={themeColour}
             />
           );
         })}
