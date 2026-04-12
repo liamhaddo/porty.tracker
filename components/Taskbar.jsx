@@ -59,8 +59,8 @@ export default function Taskbar({ themeColour = '#6366f1', onAdd }) {
 
       {/* ── Mobile bottom bar (fixed, only on mobile) ── */}
       <div
-        className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-100 shadow-[0_-2px_16px_rgba(0,0,0,0.07)] rounded-t-2xl flex items-center justify-between px-4 pt-2.5"
-        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 10px)' }}
+        className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-100 shadow-[0_-2px_16px_rgba(0,0,0,0.07)] rounded-t-2xl flex items-center justify-between px-6 pt-2.5"
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 14px)' }}
       >
         {/* Nav icons */}
         <div className="flex items-center gap-1">

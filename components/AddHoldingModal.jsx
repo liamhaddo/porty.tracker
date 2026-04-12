@@ -32,7 +32,7 @@ export default function AddHoldingModal({ onClose, onSave, themeColour = '#6366f
               value={ticker}
               onChange={e => setTicker(e.target.value.toUpperCase())}
               placeholder="e.g. AAPL"
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-900 placeholder-gray-300 focus:outline-none focus:ring-2 uppercase"
+              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-base text-gray-900 placeholder-gray-300 focus:outline-none focus:ring-2 uppercase"
               style={{ '--tw-ring-color': themeColour }}
               autoFocus
             />
@@ -48,7 +48,7 @@ export default function AddHoldingModal({ onClose, onSave, themeColour = '#6366f
               placeholder="e.g. 10.5"
               step="any"
               min="0"
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-900 placeholder-gray-300 focus:outline-none focus:ring-2"
+              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-base text-gray-900 placeholder-gray-300 focus:outline-none focus:ring-2"
             />
           </div>
           {error && <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>}

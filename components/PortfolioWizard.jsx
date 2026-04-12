@@ -61,7 +61,7 @@ export default function PortfolioWizard({ mode = 'create', portfolio = null, onC
             onChange={e => setName(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && name.trim() && setStep(2)}
             placeholder="e.g. Investments, Retirement, Speculative"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-base text-gray-900 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-300"
             autoFocus
           />
         </div>
