@@ -147,7 +147,7 @@ export default function PortfolioTracker({ portfolio, onBack, onUpdate }) {
       </header>
 
       {/* Main */}
-      <main className="max-w-3xl mx-auto px-4 py-5 space-y-4 pb-28 sm:pb-5">
+      <main className="max-w-3xl mx-auto px-4 py-5 space-y-4 pb-24 sm:pb-5">
         <Taskbar themeColour={themeColour} onAdd={() => setShowAddMenu(true)} />
         <SummaryBar
           totalValue={totalValue}
