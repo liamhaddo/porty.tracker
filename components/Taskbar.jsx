@@ -57,22 +57,22 @@ export default function Taskbar({ themeColour = '#6366f1', onAdd }) {
         </button>
       </div>
 
-      {/* ── Mobile floating island (fixed, only on mobile) ── */}
+      {/* ── Mobile bottom bar (fixed, full-width, only on mobile) ── */}
       <div
-        className="sm:hidden fixed left-4 right-4 z-40 bg-white rounded-2xl shadow-lg flex items-center justify-between px-4 py-2.5"
-        style={{ bottom: 'calc(env(safe-area-inset-bottom) + 12px)' }}
+        className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-100 shadow-[0_-2px_12px_rgba(0,0,0,0.06)] flex items-center px-4 py-3"
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 20px)' }}
       >
-        {/* Nav icons */}
-        <div className="flex items-center gap-1">
+        {/* Nav icons — evenly spaced across the left, take remaining space */}
+        <div className="flex-1 flex items-center justify-around">
           {NAV_ITEMS.map(({ id, Icon, label, active }) => (
             <button
               key={id}
               onClick={active ? undefined : () => showToast(label)}
-              className="relative flex flex-col items-center justify-center w-11 h-11 rounded-xl transition-colors"
+              className="relative flex flex-col items-center justify-center w-12 h-10 rounded-xl transition-colors"
               aria-label={label}
             >
               <Icon
-                size={20}
+                size={22}
                 strokeWidth={active ? 2.5 : 2}
                 style={active ? { color: themeColour } : undefined}
                 className={active ? '' : 'text-gray-400'}
@@ -87,10 +87,10 @@ export default function Taskbar({ themeColour = '#6366f1', onAdd }) {
           ))}
         </div>
 
-        {/* + Add button */}
+        {/* + Add button — fixed to the far right */}
         <button
           onClick={onAdd}
-          className="flex items-center gap-1.5 text-xs font-semibold text-white rounded-xl px-4 py-2.5 transition-opacity active:opacity-80"
+          className="ml-4 flex items-center gap-1.5 text-xs font-semibold text-white rounded-xl px-4 py-2.5 transition-opacity active:opacity-80"
           style={{ backgroundColor: themeColour }}
         >
           <Plus size={14} strokeWidth={2.5} />
