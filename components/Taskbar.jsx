@@ -4,17 +4,21 @@ import { useState } from 'react';
 import { Home, BarChart2, Settings, Plus } from 'lucide-react';
 
 const NAV_ITEMS = [
-  { id: 'home',     Icon: Home,     label: 'Home',      active: true  },
-  { id: 'charts',   Icon: BarChart2, label: 'Analytics', active: false },
-  { id: 'settings', Icon: Settings, label: 'Settings',  active: false },
+  { id: 'home',      Icon: Home,     label: 'Home'      },
+  { id: 'analytics', Icon: BarChart2, label: 'Analytics' },
+  { id: 'settings',  Icon: Settings, label: 'Settings'  },
 ];
 
-export default function Taskbar({ themeColour = '#6366f1', onAdd }) {
+export default function Taskbar({ themeColour = '#6366f1', onAdd, activeTab = 'home', onTabChange }) {
   const [toast, setToast] = useState(null);
 
-  function showToast(label) {
-    setToast(`${label} — coming soon`);
-    setTimeout(() => setToast(null), 2200);
+  function handleNav(id) {
+    if (id === 'settings') {
+      setToast('Settings — coming soon');
+      setTimeout(() => setToast(null), 2200);
+      return;
+    }
+    onTabChange?.(id);
   }
 
   return (
@@ -23,27 +27,30 @@ export default function Taskbar({ themeColour = '#6366f1', onAdd }) {
       <div className="hidden sm:flex items-center justify-between bg-white rounded-2xl shadow-sm px-3 py-1.5">
         {/* Nav icons */}
         <div className="flex items-center gap-0.5">
-          {NAV_ITEMS.map(({ id, Icon, label, active }) => (
-            <button
-              key={id}
-              onClick={active ? undefined : () => showToast(label)}
-              className="relative flex items-center justify-center w-9 h-9 rounded-xl transition-colors hover:bg-gray-50"
-              aria-label={label}
-            >
-              <Icon
-                size={17}
-                strokeWidth={active ? 2.5 : 2}
-                style={active ? { color: themeColour } : undefined}
-                className={active ? '' : 'text-gray-400 hover:text-gray-600'}
-              />
-              {active && (
-                <span
-                  className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
-                  style={{ backgroundColor: themeColour }}
+          {NAV_ITEMS.map(({ id, Icon, label }) => {
+            const active = id === activeTab;
+            return (
+              <button
+                key={id}
+                onClick={() => handleNav(id)}
+                className="relative flex items-center justify-center w-9 h-9 rounded-xl transition-colors hover:bg-gray-50"
+                aria-label={label}
+              >
+                <Icon
+                  size={17}
+                  strokeWidth={active ? 2.5 : 2}
+                  style={active ? { color: themeColour } : undefined}
+                  className={active ? '' : 'text-gray-400 hover:text-gray-600'}
                 />
-              )}
-            </button>
-          ))}
+                {active && (
+                  <span
+                    className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
+                    style={{ backgroundColor: themeColour }}
+                  />
+                )}
+              </button>
+            );
+          })}
         </div>
 
         {/* + Add button */}
@@ -64,27 +71,30 @@ export default function Taskbar({ themeColour = '#6366f1', onAdd }) {
       >
         {/* Nav icons — evenly spaced across the left, take remaining space */}
         <div className="flex-1 flex items-center justify-around">
-          {NAV_ITEMS.map(({ id, Icon, label, active }) => (
-            <button
-              key={id}
-              onClick={active ? undefined : () => showToast(label)}
-              className="relative flex flex-col items-center justify-center w-12 h-10 rounded-xl transition-colors"
-              aria-label={label}
-            >
-              <Icon
-                size={22}
-                strokeWidth={active ? 2.5 : 2}
-                style={active ? { color: themeColour } : undefined}
-                className={active ? '' : 'text-gray-400'}
-              />
-              {active && (
-                <span
-                  className="mt-1 w-1 h-1 rounded-full"
-                  style={{ backgroundColor: themeColour }}
+          {NAV_ITEMS.map(({ id, Icon, label }) => {
+            const active = id === activeTab;
+            return (
+              <button
+                key={id}
+                onClick={() => handleNav(id)}
+                className="relative flex flex-col items-center justify-center w-12 h-10 rounded-xl transition-colors"
+                aria-label={label}
+              >
+                <Icon
+                  size={22}
+                  strokeWidth={active ? 2.5 : 2}
+                  style={active ? { color: themeColour } : undefined}
+                  className={active ? '' : 'text-gray-400'}
                 />
-              )}
-            </button>
-          ))}
+                {active && (
+                  <span
+                    className="mt-1 w-1 h-1 rounded-full"
+                    style={{ backgroundColor: themeColour }}
+                  />
+                )}
+              </button>
+            );
+          })}
         </div>
 
         {/* + Add button — fixed to the far right */}

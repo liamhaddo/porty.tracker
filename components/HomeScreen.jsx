@@ -2,8 +2,9 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Logo from './Logo';
+import Taskbar from './Taskbar';
 
-export default function HomeScreen({ portfolios, onOpen, onCreate, onEdit, onDelete }) {
+export default function HomeScreen({ portfolios, onOpen, onCreate, onEdit, onDelete, onTabChange, activeTab }) {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center px-4 py-16">
       {/* Logo */}
@@ -37,6 +38,8 @@ export default function HomeScreen({ portfolios, onOpen, onCreate, onEdit, onDel
           + Create New Portfolio
         </button>
       </div>
+
+      <Taskbar onTabChange={onTabChange} activeTab={activeTab} onAdd={onCreate} />
     </div>
   );
 }

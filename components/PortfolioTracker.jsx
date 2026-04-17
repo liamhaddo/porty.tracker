@@ -9,6 +9,7 @@ import AddHoldingModal from './AddHoldingModal';
 import ImportCsvModal from './ImportCsvModal';
 import AddMenu from './AddMenu';
 import Taskbar from './Taskbar';
+import CongressFeed from './CongressFeed';
 import { buildChartData, applySplitsToTransactions } from '../lib/chartCalc';
 import { savePortfolio } from '../lib/storage';
 import { useTickerColours } from '../lib/useTickerColours';
@@ -24,6 +25,7 @@ export default function PortfolioTracker({ portfolio, onBack, onUpdate }) {
   const [chartData,   setChartData]   = useState([]);
   const [loadingPrices, setLoadingPrices] = useState(true);
   const [lastUpdated, setLastUpdated] = useState(null);
+  const [activeTab,   setActiveTab]   = useState('home');
   const [showAddMenu, setShowAddMenu] = useState(false);
   const [showAdd,     setShowAdd]     = useState(false);
   const [showImport,  setShowImport]  = useState(false);
@@ -148,38 +150,52 @@ export default function PortfolioTracker({ portfolio, onBack, onUpdate }) {
 
       {/* Main */}
       <main className="max-w-3xl mx-auto px-4 py-5 space-y-4 pb-24 sm:pb-5">
-        <Taskbar themeColour={themeColour} onAdd={() => setShowAddMenu(true)} />
-        <SummaryBar
-          totalValue={totalValue}
-          lastUpdated={lastUpdated}
-          loading={loadingPrices}
-          currency={currency}
-          fxRate={fxRate}
-        />
-        <PieChartSection
-          holdings={portfolio.holdings}
-          prices={prices}
-          loading={loadingPrices}
-          currency={currency}
-          fxRate={fxRate}
+        <Taskbar
           themeColour={themeColour}
-          tickerColours={tickerColours}
+          onAdd={() => setShowAddMenu(true)}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
         />
-        <LineGraph
-          chartData={chartData}
-          loading={loadingPrices}
-          currency={currency}
-          fxRate={fxRate}
-          themeColour={themeColour}
-        />
-        <HoldingsList
-          holdings={portfolio.holdings}
-          prices={prices}
-          loading={loadingPrices}
-          currency={currency}
-          fxRate={fxRate}
-          themeColour={themeColour}
-        />
+
+        {activeTab === 'home' && (
+          <>
+            <SummaryBar
+              totalValue={totalValue}
+              lastUpdated={lastUpdated}
+              loading={loadingPrices}
+              currency={currency}
+              fxRate={fxRate}
+            />
+            <PieChartSection
+              holdings={portfolio.holdings}
+              prices={prices}
+              loading={loadingPrices}
+              currency={currency}
+              fxRate={fxRate}
+              themeColour={themeColour}
+              tickerColours={tickerColours}
+            />
+            <LineGraph
+              chartData={chartData}
+              loading={loadingPrices}
+              currency={currency}
+              fxRate={fxRate}
+              themeColour={themeColour}
+            />
+            <HoldingsList
+              holdings={portfolio.holdings}
+              prices={prices}
+              loading={loadingPrices}
+              currency={currency}
+              fxRate={fxRate}
+              themeColour={themeColour}
+            />
+          </>
+        )}
+
+        {activeTab === 'analytics' && (
+          <CongressFeed themeColour={themeColour} />
+        )}
       </main>
 
       {showAddMenu && (
