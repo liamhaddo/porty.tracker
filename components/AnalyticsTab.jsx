@@ -368,7 +368,7 @@ export default function AnalyticsTab({ onTabChange }) {
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto pb-24 sm:pb-6">
+      <div className="flex-1 overflow-y-auto pb-32 sm:pb-6">
         {error && (
           <div className="mx-3 mt-4 flex items-start gap-2 p-3 bg-red-50 border border-red-100 rounded-2xl">
             <AlertCircle size={14} className="text-red-400 shrink-0 mt-0.5" />

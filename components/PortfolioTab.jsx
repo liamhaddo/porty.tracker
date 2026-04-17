@@ -149,7 +149,7 @@ export default function PortfolioTab({
 
   return (
     <div className="bg-gray-50">
-      <main className="max-w-3xl mx-auto px-4 py-5 space-y-4 pb-24 sm:pb-6">
+      <main className="max-w-3xl mx-auto px-4 py-5 space-y-4 pb-32 sm:pb-6">
 
         {/* ── Portfolio selector card ── */}
         <div className="bg-white rounded-2xl shadow-sm px-4 py-3 relative" ref={dropdownRef}>

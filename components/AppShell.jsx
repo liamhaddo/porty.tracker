@@ -86,8 +86,8 @@ export default function AppShell({ activeTab, onTabChange, currency, onCurrencyC
 
       {/* ── Mobile bottom bar ── */}
       <div
-        className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-100 shadow-[0_-2px_12px_rgba(0,0,0,0.06)] flex items-center justify-around px-4 py-3"
-        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 12px)' }}
+        className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-100 shadow-[0_-2px_12px_rgba(0,0,0,0.06)] flex items-center justify-around px-4 pt-3 pb-0"
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 16px)' }}
       >
         {NAV_ITEMS.map(({ id, Icon, label }) => {
           const active = id === activeTab;
