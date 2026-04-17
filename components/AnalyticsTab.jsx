@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { RefreshCw, Search, X, ChevronDown, ChevronUp, Plus, AlertCircle } from 'lucide-react';
-import Taskbar from './Taskbar';
+import CongressFeed from './CongressFeed';
 
 const CACHE_KEY     = 'porty_analytics_cache';
 const CACHE_TTL_MS  = 60 * 60 * 1000;
@@ -305,7 +305,7 @@ export default function AnalyticsTab({ onTabChange }) {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      <div className="bg-white px-4 pt-14 pb-3 border-b border-gray-100 shadow-sm">
+      <div className="bg-white px-4 pt-4 pb-3 border-b border-gray-100 shadow-sm">
         <div className="flex items-center justify-between mb-3">
           <div>
             <h1 className="text-lg font-bold text-gray-900 leading-none">Analytics</h1>
@@ -368,7 +368,7 @@ export default function AnalyticsTab({ onTabChange }) {
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto pb-36">
+      <div className="flex-1 overflow-y-auto pb-24 sm:pb-6">
         {error && (
           <div className="mx-3 mt-4 flex items-start gap-2 p-3 bg-red-50 border border-red-100 rounded-2xl">
             <AlertCircle size={14} className="text-red-400 shrink-0 mt-0.5" />
@@ -463,6 +463,14 @@ export default function AnalyticsTab({ onTabChange }) {
               </div>
             )}
 
+            {/* Congress Trades */}
+            <div className="bg-white mt-3 mx-3 rounded-2xl shadow-sm overflow-hidden">
+              <div className="flex items-center justify-between px-4 py-2.5 bg-gray-50/70 border-b border-gray-100">
+                <p className="text-xs font-semibold text-gray-500 tracking-wide uppercase">🏛 Congress Trades</p>
+              </div>
+              <CongressFeed themeColour="#2E6F40" />
+            </div>
+
             <p className="text-center text-[10px] text-gray-300 mt-4 mb-2 px-6 leading-relaxed">
               Scores are AI-generated for informational purposes only. Not financial advice. Always do your own research.
             </p>
@@ -470,7 +478,6 @@ export default function AnalyticsTab({ onTabChange }) {
         )}
       </div>
 
-      <Taskbar themeColour={THEME} activeTab="analytics" onTabChange={onTabChange} onAdd={() => searchRef.current?.focus()} />
     </div>
   );
 }

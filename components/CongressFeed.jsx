@@ -202,7 +202,7 @@ function setCachedScore(key, value) {
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export default function CongressFeed({ themeColour = '#6366f1' }) {
+export default function CongressFeed({ themeColour = '#2E6F40' }) {
   const [trades,  setTrades]  = useState([]);
   const [loading, setLoading] = useState(true);
   const [error,   setError]   = useState(null);

@@ -1,52 +1,91 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import HomeScreen       from '../components/HomeScreen';
-import PortfolioWizard  from '../components/PortfolioWizard';
-import PortfolioTracker from '../components/PortfolioTracker';
-import AnalyticsTab     from '../components/AnalyticsTab';
+import AppShell        from '../components/AppShell';
+import PortfolioTab    from '../components/PortfolioTab';
+import AnalyticsTab    from '../components/AnalyticsTab';
+import PortfolioWizard from '../components/PortfolioWizard';
 import { getPortfolios, savePortfolio, deletePortfolio } from '../lib/storage';
 
 export default function App() {
-  const [screen,     setScreen]     = useState('home');
-  const [portfolios, setPortfolios] = useState([]);
-  const [active,     setActive]     = useState(null);
-  const [editing,    setEditing]    = useState(null);
+  const [activeTab,       setActiveTab]       = useState('portfolio');
+  const [portfolios,      setPortfolios]      = useState([]);
+  const [activePortfolio, setActivePortfolio] = useState(null);
+  const [wizardMode,      setWizardMode]      = useState(null);
+  const [editing,         setEditing]         = useState(null);
+  const [currency,        setCurrency]        = useState('USD');
 
-  useEffect(() => { setPortfolios(getPortfolios()); }, []);
+  useEffect(() => {
+    const list = getPortfolios();
+    setPortfolios(list);
+    if (list.length > 0) setActivePortfolio(list[0]);
+  }, []);
 
-  function refreshList() { setPortfolios(getPortfolios()); }
-
-  function handleTabChange(tab) {
-    if (tab === 'home')      { setScreen('home'); refreshList(); }
-    if (tab === 'analytics') { setScreen('analytics'); }
+  function refreshList() {
+    const list = getPortfolios();
+    setPortfolios(list);
+    return list;
   }
 
-  function handleOpen(portfolio)  { setActive(portfolio); setScreen('tracker'); }
-  function handleCreate()         { setEditing(null); setScreen('wizard'); }
-  function handleEdit(portfolio)  { setEditing(portfolio); setScreen('wizard'); }
+  function handleDelete(id) {
+    deletePortfolio(id);
+    const list = refreshList();
+    if (activePortfolio?.id === id) {
+      setActivePortfolio(list.length > 0 ? list[0] : null);
+    }
+  }
 
-  function handleWizardComplete(portfolio) { refreshList(); setActive(portfolio); setScreen('tracker'); }
-  function handleWizardCancel()            { setScreen('home'); refreshList(); }
+  function handleWizardComplete(portfolio) {
+    refreshList();
+    setActivePortfolio(portfolio);
+    setWizardMode(null);
+    setEditing(null);
+  }
 
-  function handleTrackerUpdate(updated) { setActive(updated); savePortfolio(updated); refreshList(); }
-  function handleDelete(id)             { deletePortfolio(id); refreshList(); }
-  function handleBack()                 { setScreen('home'); refreshList(); }
+  function handleUpdate(updated) {
+    savePortfolio(updated);
+    setActivePortfolio(updated);
+    refreshList();
+  }
 
-  if (screen === 'analytics') return <AnalyticsTab onTabChange={handleTabChange} />;
-
-  if (screen === 'wizard') return (
-    <PortfolioWizard mode={editing ? 'edit' : 'create'} portfolio={editing}
-      onComplete={handleWizardComplete} onCancel={handleWizardCancel} />
-  );
-
-  if (screen === 'tracker' && active) return (
-    <PortfolioTracker portfolio={active} onBack={handleBack} onUpdate={handleTrackerUpdate} />
-  );
+  if (wizardMode) {
+    return (
+      <PortfolioWizard
+        mode={wizardMode}
+        portfolio={editing}
+        onComplete={handleWizardComplete}
+        onCancel={() => { setWizardMode(null); setEditing(null); }}
+      />
+    );
+  }
 
   return (
-    <HomeScreen portfolios={portfolios} onOpen={handleOpen} onCreate={handleCreate}
-      onEdit={handleEdit} onDelete={handleDelete}
-      onTabChange={handleTabChange} activeTab="home" />
+    <AppShell
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
+      currency={currency}
+      onCurrencyChange={setCurrency}
+    >
+      {activeTab === 'portfolio' && (
+        <PortfolioTab
+          portfolios={portfolios}
+          activePortfolio={activePortfolio}
+          onSelectPortfolio={setActivePortfolio}
+          onCreate={() => { setEditing(null); setWizardMode('create'); }}
+          onEdit={(p) => { setEditing(p); setWizardMode('edit'); }}
+          onDelete={handleDelete}
+          onUpdate={handleUpdate}
+          currency={currency}
+        />
+      )}
+      {activeTab === 'analytics' && (
+        <AnalyticsTab onTabChange={setActiveTab} />
+      )}
+      {activeTab === 'settings' && (
+        <div className="flex items-center justify-center pt-32">
+          <p className="text-sm text-gray-400">Settings — coming soon</p>
+        </div>
+      )}
+    </AppShell>
   );
 }

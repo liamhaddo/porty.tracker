@@ -1,20 +1,17 @@
-// Shared branded wordmark used on both the home screen and the tracker header.
-
 export default function Logo() {
   return (
-    <span
-      style={{
+    <div className="flex flex-col items-start leading-none">
+      <div className="h-0.5 w-full mb-1" style={{ backgroundColor: '#2E6F40' }} />
+      <span style={{
         fontFamily: 'Georgia, "Times New Roman", serif',
+        fontWeight: 700,
+        fontSize: '1.75rem',
+        color: '#0f1923',
+        letterSpacing: '-0.02em',
         lineHeight: 1,
-        display: 'inline-block',
-      }}
-    >
-      <span style={{ fontSize: '2.25rem', fontWeight: 700, color: '#111827' }}>
-        porty.
+      }}>
+        porty
       </span>
-      <span style={{ fontSize: '1.35rem', fontWeight: 600, color: '#9CA3AF' }}>
-        tracker
-      </span>
-    </span>
+    </div>
   );
 }
