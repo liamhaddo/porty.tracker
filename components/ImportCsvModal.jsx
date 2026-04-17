@@ -16,6 +16,7 @@ export default function ImportCsvModal({ onClose, onImport, existingTransactions
     setError('');
     try {
       const text = await file.text();
+      console.log('[CSV] raw first 200 chars:', text.slice(0, 200));
       const rawTxs = parseCSVToTransactions(text);
       if (rawTxs.length === 0) throw new Error('No valid transactions found.');
       setParsed({ rawTxs, fileName: file.name });
@@ -41,6 +42,7 @@ export default function ImportCsvModal({ onClose, onImport, existingTransactions
 
     const adjusted = applySplitsToTransactions(finalTxs);
     const holdings = calcNetHoldings(adjusted);
+    console.log('[CSV] transactions parsed:', finalTxs.length, 'holdings calculated:', holdings.length);
     onImport(holdings, finalTxs);
     onClose();
   }

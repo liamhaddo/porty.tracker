@@ -17,7 +17,6 @@ const LineGraph       = dynamic(() => import('./LineGraph'),       { ssr: false 
 
 const REFRESH_MS = 60_000;
 const ACCENT = '#2E6F40';
-const SWATCHES = ['#2E6F40', '#6366f1', '#f59e0b', '#ef4444', '#3b82f6', '#8b5cf6', '#ec4899', '#0f172a'];
 
 export default function PortfolioTab({
   portfolios,
@@ -176,28 +175,9 @@ export default function PortfolioTab({
             </button>
           </div>
 
-          {/* Colour swatches */}
-          {activePortfolio && (
-            <div className="flex gap-2 mt-3">
-              {SWATCHES.map(colour => (
-                <button
-                  key={colour}
-                  onClick={() => onUpdate({ ...activePortfolio, themeColour: colour })}
-                  className="w-6 h-6 rounded-full transition-transform hover:scale-110 active:scale-95"
-                  style={{
-                    backgroundColor: colour,
-                    outline: colour === activePortfolio.themeColour ? `2px solid ${colour}` : 'none',
-                    outlineOffset: '2px',
-                  }}
-                  aria-label={`Set colour ${colour}`}
-                />
-              ))}
-            </div>
-          )}
-
           {/* Dropdown */}
           {dropdownOpen && (
-            <div className="absolute left-0 right-0 top-full mt-1 bg-white rounded-2xl shadow-lg z-40 overflow-hidden border border-gray-100">
+            <div className="absolute left-0 right-0 top-full mt-1 bg-white rounded-2xl shadow-lg z-40 border border-gray-100">
               {portfolios.map(p => (
                 <PortfolioDropdownRow
                   key={p.id}
